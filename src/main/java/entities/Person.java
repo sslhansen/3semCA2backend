@@ -12,7 +12,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-
 @Entity
 public class Person implements Serializable {
 
@@ -29,10 +28,10 @@ public class Person implements Serializable {
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
     List<Phone> phones;
-    
+
     @ManyToOne
     private Address address;
-    
+
     public Person(String email, String firstName, String lastName) {
         this.email = email;
         this.firstName = firstName;
@@ -40,19 +39,23 @@ public class Person implements Serializable {
         this.hobbies = new ArrayList<>();
         this.phones = new ArrayList<>();
     }
-    
+
     public Person() {
     }
-    
-    public void addHobby(Hobby hobby){
-        if (hobby != null){
+
+    public List<Hobby> getHobbies() {
+        return hobbies;
+    }
+
+    public void addHobby(Hobby hobby) {
+        if (hobby != null) {
             this.hobbies.add(hobby);
             hobby.getPersons().add(this);
         }
     }
-    
-    public void removeHobby(Hobby hobby){
-        if (hobby != null){
+
+    public void removeHobby(Hobby hobby) {
+        if (hobby != null) {
             this.hobbies.remove(hobby);
             hobby.getPersons().remove(this);
         }
@@ -61,7 +64,7 @@ public class Person implements Serializable {
     public List<Phone> getPhones() {
         return phones;
     }
-    
+
     public void addPhone(Phone phone) {
         this.phones.add(phone);
         if (phone != null) {
@@ -76,7 +79,7 @@ public class Person implements Serializable {
     public void setAddress(Address address) {
         this.address = address;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -109,7 +112,4 @@ public class Person implements Serializable {
         this.lastName = lastName;
     }
 
-    
-    
-    
 }

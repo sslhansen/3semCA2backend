@@ -1,14 +1,17 @@
 package dto;
 
 import entities.Hobby;
-
+import entities.Person;
+import java.util.List;
 
 public class HobbyDTO {
+
     private Long id;
     private String name;
     private String link;
     private String type;
     private String description;
+    private List<Person> persons;
 
     public HobbyDTO(Hobby hobby) {
         this.id = hobby.getId();
@@ -16,9 +19,14 @@ public class HobbyDTO {
         this.link = hobby.getLink();
         this.type = hobby.getType();
         this.description = hobby.getDescription();
+        this.persons = hobby.getPersons();
     }
 
     public HobbyDTO() {
+    }
+
+    public List<Person> getPersons() {
+        return persons;
     }
 
     public Long getId() {
@@ -60,9 +68,5 @@ public class HobbyDTO {
     public void setDescription(String description) {
         this.description = description;
     }
-    
-    
-    
-    
-    
+
 }

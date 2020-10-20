@@ -1,19 +1,41 @@
 package dto;
 
+import entities.Address;
+import entities.Hobby;
 import entities.Person;
-
+import entities.Phone;
+import java.util.List;
 
 public class PersonDTO {
+
     private Long id;
     private String email;
     private String firstName;
     private String lastName;
+    private List<Hobby> hobbies;
+    private Address address;
+    private List<Phone> phones;
 
     public PersonDTO(Person person) {
         this.id = person.getId();
         this.email = person.getEmail();
         this.firstName = person.getFirstName();
         this.lastName = person.getLastName();
+        this.hobbies = person.getHobbies();
+        this.address = person.getAddress();
+        this.phones = person.getPhones();
+    }
+
+    public List<Hobby> getHobbies() {
+        return hobbies;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public List<Phone> getPhones() {
+        return phones;
     }
 
     public PersonDTO() {

@@ -1,28 +1,26 @@
 package dto;
 
 import entities.Address;
+import entities.Person;
+import java.util.List;
 
 public class AddressDTO {
 
-    private Long id;
     private String street;
     private String additionalInfo;
+    private List<Person> persons;
 
-    public AddressDTO(Address adress) {
-        this.id = adress.getId();
-        this.street = adress.getStreet();
-        this.additionalInfo = adress.getAdditionalInfo();
+    public AddressDTO(Address address) {
+        this.street = address.getStreet();
+        this.additionalInfo = address.getAdditionalInfo();
+        this.persons = address.getPersons();
     }
-    
+
     public AddressDTO() {
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public List<Person> getPersons() {
+        return persons;
     }
 
     public String getStreet() {
@@ -40,5 +38,5 @@ public class AddressDTO {
     public void setAdditionalInfo(String additionalInfo) {
         this.additionalInfo = additionalInfo;
     }
-    
+
 }
