@@ -8,6 +8,7 @@ import entities.Person;
 import entities.Phone;
 import exceptions.MissingInputException;
 import exceptions.NotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -74,12 +75,18 @@ public class PersonFacade {
     }
 
     //Get all persons, using PersonsDTO as return
-    public PersonsDTO getAllPersons() {
+    public List<PersonDTO> getAllPersons() {
         EntityManager em = getEntityManager();
         try {
-            TypedQuery<Person> query = em.createNamedQuery("Person.getAllPersons", Person.class);
-            PersonsDTO persons = new PersonsDTO(query.getResultList());
-            return persons;
+            
+            TypedQuery query = em.createNamedQuery("Person.getAllPersons", Person.class);
+            
+            List<Person> persons = query.getResultList();
+            List<PersonDTO> pDTO = new ArrayList<>();
+            for (Person p : persons) {
+                pDTO.add(new PersonDTO(p));
+            }
+            return pDTO;
         } finally {
             em.close();
         }
