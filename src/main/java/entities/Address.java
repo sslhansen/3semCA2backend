@@ -29,7 +29,7 @@ public class Address implements Serializable {
     @ManyToOne
     private CityInfo cityinfo;
 
-    public Address(String street, String additionalInfo, List<Person> persons) {
+    public Address(String street, String additionalInfo) {
         this.street = street;
         this.additionalInfo = additionalInfo;
         this.persons = new ArrayList<>();

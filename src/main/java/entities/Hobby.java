@@ -28,7 +28,7 @@ public class Hobby implements Serializable {
     public Hobby() {
     }
 
-    public Hobby(String name, String link, String type, String description, List<Person> persons) {
+    public Hobby(String name, String link, String type, String description) {
         this.name = name;
         this.link = link;
         this.type = type;

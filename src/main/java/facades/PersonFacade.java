@@ -3,6 +3,7 @@ package facades;
 import dto.PersonDTO;
 import dto.PersonsDTO;
 import entities.Address;
+import entities.CityInfo;
 import entities.Hobby;
 import entities.Person;
 import entities.Phone;
@@ -75,21 +76,49 @@ public class PersonFacade {
     }
 
     //Get all persons, using PersonsDTO as return
-    public List<PersonDTO> getAllPersons() {
+    public PersonsDTO getAllPersons() {
         EntityManager em = getEntityManager();
         try {
-            
-            TypedQuery query = em.createNamedQuery("Person.getAllPersons", Person.class);
-            
+
+            TypedQuery<Person> query = em.createNamedQuery("Person.getAllPersons", Person.class);
+           // TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p", Person.class);
             List<Person> persons = query.getResultList();
-            List<PersonDTO> pDTO = new ArrayList<>();
-            for (Person p : persons) {
-                pDTO.add(new PersonDTO(p));
-            }
+
+            PersonsDTO pDTO = new PersonsDTO(persons);
+            
             return pDTO;
         } finally {
             em.close();
         }
+    }
+
+    public void createTestPerson() {
+        CityInfo cityInfo = new CityInfo(123, "lolcity");
+        Address address = new Address("lol", "dont live here");
+        Phone phone = new Phone(12345678, "dont call me");
+        Hobby hobby = new Hobby("loasld", "nej", "ok", "asd");
+        Person person = new Person("stgerve", "mecgee", "lolasdas");
+        person.addHobby(hobby);
+        person.addPhone(phone);
+        cityInfo.addAddress(address);
+        person.setAddress(address);
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(cityInfo);
+            em.getTransaction().commit();
+            em.getTransaction().begin();
+            em.persist(address);
+            em.getTransaction().commit();
+
+            em.getTransaction().begin();
+            em.persist(person);
+            em.getTransaction().commit();
+
+        } finally {
+            em.close();
+        }
+
     }
 
     //Get a person by a phone number, that must be 8 characters long
