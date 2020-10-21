@@ -11,23 +11,19 @@ public class HobbyDTO {
     private String link;
     private String type;
     private String description;
-    private List<Person> persons;
+    
 
     public HobbyDTO(Hobby hobby) {
         this.id = hobby.getId();
         this.name = hobby.getName();
         this.link = hobby.getLink();
         this.type = hobby.getType();
-        this.description = hobby.getDescription();
-        this.persons = hobby.getPersons();
+        this.description = hobby.getDescription();    
     }
 
     public HobbyDTO() {
     }
 
-    public List<Person> getPersons() {
-        return persons;
-    }
 
     public Long getId() {
         return id;

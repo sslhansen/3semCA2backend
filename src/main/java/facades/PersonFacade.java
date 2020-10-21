@@ -1,5 +1,6 @@
 package facades;
 
+import dto.AddressDTO;
 import dto.PersonDTO;
 import dto.PersonsDTO;
 import entities.Address;
@@ -83,7 +84,7 @@ public class PersonFacade {
             TypedQuery<Person> query = em.createNamedQuery("Person.getAllPersons", Person.class);
            // TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p", Person.class);
             List<Person> persons = query.getResultList();
-
+            
             PersonsDTO pDTO = new PersonsDTO(persons);
             
             return pDTO;

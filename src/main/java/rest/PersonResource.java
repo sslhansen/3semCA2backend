@@ -31,7 +31,9 @@ public class PersonResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getAllPersons() {
         PersonsDTO pDTO = FACADE.getAllPersons();
-        return GSON.toJson(pDTO);
+        String json = GSON.toJson(pDTO);
+        return json;
+        //return GSON.toJson(pDTO);
     }
 
     @Path("lol")
