@@ -1,5 +1,6 @@
 package facades;
 
+import dto.PersonDTO;
 import entities.Address;
 import entities.CityInfo;
 import entities.Hobby;
@@ -12,6 +13,7 @@ import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -135,4 +137,38 @@ public class PersonFacadeTest {
         assertEquals(expectedPersons, facade.getAllPersons().getAll().size(), "Expects two persons");
     }
 
+//    @Test
+//    public void testDeletePerson(){
+//        EntityManager em = emf.createEntityManager();
+//        try {
+//            Person person1 = em.find(Person.class, person1.getId());
+//            assertNotNull(person1);
+//            facade.deletePerson(person1.getId());
+//            assertEquals(1, facade.getAllPersons());
+//
+//        } finally {
+//            em.close();
+//        }
+//    }
+//    @Test
+//    public void testGetPersonByAddress() {
+//        Person person1 = facade.
+//        person1.getAddress();
+//        Movie mov = facade.getPersonByAdd(person1.getAddress());
+//        assertEquals(rm1.getTitle(), mov.getTitle());
+//    }
+//    @Test
+//    public void testGetPersonByAddress() {
+//        
+//     PersonDTO person1 = facade.getPersonByAdd(streetName);
+//     int expectedPerson = person1.getAddress()
+//        assertEquals("lol", person1.getAddress());
+//    }
+//     @Test
+//    public void testGetPersonByAddress() {
+//        int actualSize = facade.;
+//        int expectedSize = "Hejda";
+//        assertEquals(expectedSize, actualSize, "Expects Hejsa");
+//    }
+// Why do i choose to suffer when death is inevitable anyway
 }
