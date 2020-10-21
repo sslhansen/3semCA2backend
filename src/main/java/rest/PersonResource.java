@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.PersonDTO;
 import dto.PersonsDTO;
+import entities.Address;
 import entities.Person;
 import entities.Phone;
 import exceptions.MissingInputException;
@@ -51,5 +52,21 @@ public class PersonResource {
         PersonDTO p = FACADE.getPersonByTel(number);
         return GSON.toJson(p);
     }
+    
+    @Path("/zip/{number}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String lol3(@PathParam("number") int number) throws NotFoundException, MissingInputException {
+        PersonsDTO p = FACADE.getAllPersonsInZip(number);
+        return GSON.toJson(p);
+    }
+    
+//    @Path("/address/{address}")
+//    @GET
+//    @Produces({MediaType.APPLICATION_JSON})
+//    public String lol4(@PathParam("address") Address address) throws NotFoundException, MissingInputException {
+//        PersonsDTO p = FACADE.getPersonByAdd(address);
+//        return GSON.toJson(p);
+//    }
 
 }

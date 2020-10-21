@@ -163,7 +163,7 @@ public class PersonFacade {
     }
 
     //Get a persons by address
-    public PersonsDTO getPersonByTel(Address address) throws NotFoundException {
+    public PersonsDTO getPersonByAdd(Address address) throws NotFoundException {
         EntityManager em = getEntityManager();
 
         try {
