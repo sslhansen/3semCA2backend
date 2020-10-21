@@ -82,11 +82,11 @@ public class PersonFacade {
         try {
 
             TypedQuery<Person> query = em.createNamedQuery("Person.getAllPersons", Person.class);
-           // TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p", Person.class);
+            // TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p", Person.class);
             List<Person> persons = query.getResultList();
-            
+
             PersonsDTO pDTO = new PersonsDTO(persons);
-            
+
             return pDTO;
         } finally {
             em.close();
@@ -182,23 +182,38 @@ public class PersonFacade {
 
     public PersonDTO editPerson(Person p) throws MissingInputException, NotFoundException {
         EntityManager em = getEntityManager();
+        System.out.println(p.getFirstName() + p.getLastName());
         isPersonNameCorrect(p);
         try {
             Person person = em.find(Person.class, p.getId());
             if (p == null) {
                 throw new NotFoundException("The chosen action is not possible, lol");
             }
+            person.setAddress(getAddressByStreet(p.getAddress().getStreet()));
             em.getTransaction().begin();
             person.setFirstName(p.getFirstName());
             person.setLastName(p.getLastName());
             person.setEmail(p.getEmail());
-            person.setAddress(p.getAddress());
             em.getTransaction().commit();
             return new PersonDTO(person);
         } finally {
             em.close();
         }
+    }
 
+    public Address getAddressByStreet(String streetName) throws NotFoundException {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Address> query = em.createQuery("SELECT a FROM Address a WHERE a.street = :street", Address.class);
+            query.setParameter("street", streetName);
+            Address adr = query.getSingleResult();
+            if (adr == null) {
+                throw new NotFoundException("The chosen action is not possible, lol");
+            }
+            return adr;
+        } finally {
+            em.close();
+        }
     }
 
     //Delete person by id
