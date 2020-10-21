@@ -2,14 +2,15 @@ package dto;
 
 import entities.CityInfo;
 
-
 public class CityInfoDTO {
+
     private int zipCode;
     private String city;
 
     public CityInfoDTO(CityInfo cityInfo) {
         this.zipCode = cityInfo.getZipCode();
         this.city = cityInfo.getCity();
+
     }
 
     public CityInfoDTO() {
@@ -30,5 +31,5 @@ public class CityInfoDTO {
     public void setCity(String city) {
         this.city = city;
     }
-    
+
 }

@@ -12,6 +12,7 @@ import exceptions.MissingInputException;
 import exceptions.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
@@ -46,40 +47,62 @@ public class PersonFacade {
     public PersonDTO addPerson(Person person) throws MissingInputException, NotFoundException {
         EntityManager em = getEntityManager();
         isPersonNameCorrect(person);
-        for (Phone p : person.getPhones()) {
-            isPhonenumberCorrect(p);
-        }
         em.getTransaction().begin();
+        System.out.println(person.getPhones().size());
 
-//        CityInfo ci;
-//        if (!cityinfoExists(person.getAddress().getCityinfo().getZipCode())) {
-//            throw new NotFoundException("Cityinfo does not exist");
-//        } else {
-//            ci = getCityInfoByZip(person.getAddress().getCityinfo().getZipCode());
-//        }
-
-        Address address = null;
-        if (addressExists(person.getAddress().getStreet())) {
-            person.setAddress(getAddressByStreet(person.getAddress().getStreet()));
-        } else {
-            address = new Address(person.getAddress().getStreet(), person.getAddress().getAdditionalInfo());
+        List<Phone> foner = new ArrayList();
+        for (Phone pa : person.getPhones()) {
+            if (isPhonenumberCorrect(pa)) {
+                Phone p = new Phone(pa.getNumber(), pa.getDescription());
+                foner.add(p);
+            }
         }
-        
-        for (Hobby hub: person.getHobbies()) {
+        person.getPhones().clear();
+        for (Phone f : foner) {
+            person.addPhone(f);
+        }
+
+   
+        List<Hobby> hobitter = new ArrayList();
+        for (Hobby hub : person.getHobbies()) {
             if (hobbyExists(hub.getName())) {
-                person.addHobby(getHobbyByName(hub.getName()));
+                hobitter.add(getHobbyByName(hub.getName()));
             } else {
                 throw new NotFoundException("Hobby does not exist");
             }
         }
         
-//        ci.addAddress(address);
+        hobitter.get(0).getPersons().clear();
+        hobitter.get(0).getPersons().add(person);
+        for (Hobby h : hobitter) {
+            person.addHobby(h);
+        }
+            
+        CityInfo ci;
+        if (!cityinfoExists(person.getAddress().getCityinfo().getZipCode())) {
+            throw new NotFoundException("Cityinfo does not exist");
+        } else {
+            ci = getCityInfoByZip(person.getAddress().getCityinfo().getZipCode());
+        }
+        System.out.println("lol1");
+        Address address;
+        if (addressExists(person.getAddress().getStreet())) {
+            address = getAddressByStreet(person.getAddress().getStreet());
+            System.out.println("lol2");
+        } else {
+            address = new Address(person.getAddress().getStreet(), person.getAddress().getAdditionalInfo());
+            em.persist(address);
+            System.out.println("lol3");
+        }
+
         person.setAddress(address);
-        
+        ci.addAddress(address);
+        address.addPersons(person);
+
         em.persist(person);
-        
+
         em.getTransaction().commit();
-        
+
         return new PersonDTO(person);
     }
 
@@ -152,9 +175,11 @@ public class PersonFacade {
         }
     }
 
-    private void isPhonenumberCorrect(Phone p) throws MissingInputException {
+    private boolean isPhonenumberCorrect(Phone p) throws MissingInputException {
         if (Integer.valueOf(p.getNumber()) == null || Integer.valueOf(p.getNumber()).toString().length() != 8) {
             throw new MissingInputException("Phonenumber must be 8 characters long");
+        } else {
+            return true;
         }
     }
 
@@ -284,6 +309,7 @@ public class PersonFacade {
     }
 
     public Address getAddressByStreet(String streetName) throws NotFoundException {
+        System.out.println(streetName);
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Address> query = em.createQuery("SELECT a FROM Address a WHERE a.street = :street", Address.class);

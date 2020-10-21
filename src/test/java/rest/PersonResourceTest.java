@@ -25,6 +25,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import utils.EMF_Creator;
 
@@ -32,6 +33,7 @@ import utils.EMF_Creator;
  *
  * @author groen
  */
+@Disabled
 public class PersonResourceTest {
 
     private static final int SERVER_PORT = 7777;
@@ -141,18 +143,19 @@ public class PersonResourceTest {
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("msg", equalTo("Hello World"));
     }
-@Test
-    public void getAllPersons(){
-            List<PersonDTO> personsDTOs;
-        
-            Response response = given()
+
+    @Test
+    public void getAllPersons() {
+        List<PersonDTO> personsDTOs;
+
+        Response response = given()
                 .when().get("/person/all")
                 .then()
                 .contentType("application/json")
-                .body("all.firstName", hasItems("Lars","Henrik","Pleasevirk") )
+                .body("all.firstName", hasItems("Lars", "Henrik", "Pleasevirk"))
                 .extract().response();
         System.out.println(response.asString());
-            
+
     }
 
 }
