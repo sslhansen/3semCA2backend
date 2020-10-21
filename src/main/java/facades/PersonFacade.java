@@ -43,25 +43,107 @@ public class PersonFacade {
     }
 
     //Add person
-    public PersonDTO addPerson(Person person, Phone phone, Address address) throws MissingInputException {
+    public PersonDTO addPerson(Person person) throws MissingInputException, NotFoundException {
         EntityManager em = getEntityManager();
+        isPersonNameCorrect(person);
+        for (Phone p : person.getPhones()) {
+            isPhonenumberCorrect(p);
+        }
+        em.getTransaction().begin();
 
+//        CityInfo ci;
+//        if (!cityinfoExists(person.getAddress().getCityinfo().getZipCode())) {
+//            throw new NotFoundException("Cityinfo does not exist");
+//        } else {
+//            ci = getCityInfoByZip(person.getAddress().getCityinfo().getZipCode());
+//        }
+
+        Address address = null;
+        if (addressExists(person.getAddress().getStreet())) {
+            person.setAddress(getAddressByStreet(person.getAddress().getStreet()));
+        } else {
+            address = new Address(person.getAddress().getStreet(), person.getAddress().getAdditionalInfo());
+        }
+        
+        for (Hobby hub: person.getHobbies()) {
+            if (hobbyExists(hub.getName())) {
+                person.addHobby(getHobbyByName(hub.getName()));
+            } else {
+                throw new NotFoundException("Hobby does not exist");
+            }
+        }
+        
+//        ci.addAddress(address);
+        person.setAddress(address);
+        
+        em.persist(person);
+        
+        em.getTransaction().commit();
+        
+        return new PersonDTO(person);
+    }
+
+    public boolean addressExists(String streetName) throws NotFoundException {
+        EntityManager em = getEntityManager();
         try {
-            isPersonNameCorrect(person);
-            isPhonenumberCorrect(phone);
-            em.getTransaction().begin();
-            em.persist(address);
-            em.getTransaction().commit();
-            em.getTransaction().begin();
-            em.persist(person);
-            em.getTransaction().commit();
-            em.getTransaction().begin();
-            em.persist(phone);
-            em.getTransaction().commit();
+            TypedQuery<Address> query = em.createQuery("SELECT a FROM Address a WHERE a.street = :street", Address.class);
+            query.setParameter("street", streetName);
+            List<Address> adr = query.getResultList();
+            if (adr.isEmpty()) {
+                return false;
+            } else {
+                return true;
+            }
         } finally {
             em.close();
         }
-        return new PersonDTO(person);
+    }
+
+    public boolean cityinfoExists(int zipCode) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<CityInfo> query = em.createQuery("SELECT a FROM CityInfo a WHERE a.zipCode = :zipCode", CityInfo.class);
+            query.setParameter("zipCode", zipCode);
+            List<CityInfo> cityInfos = query.getResultList();
+            if (cityInfos.isEmpty()) {
+                return false;
+            } else {
+                return true;
+            }
+        } finally {
+            em.close();
+        }
+    }
+
+    public boolean hobbyExists(String hobbyName) throws NotFoundException {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Hobby> query = em.createQuery("SELECT a FROM Hobby a WHERE a.name = :name", Hobby.class);
+            query.setParameter("name", hobbyName);
+            List<Hobby> adr = query.getResultList();
+            if (adr.isEmpty()) {
+                return false;
+            } else {
+                return true;
+            }
+        } finally {
+            em.close();
+        }
+    }
+
+    public Hobby getHobbyByName(String hobbyName) throws NotFoundException {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Hobby> query = em.createQuery("SELECT a FROM Hobby a WHERE a.name = :name", Hobby.class);
+            query.setParameter("name", hobbyName);
+            Hobby hb = query.getSingleResult();
+            if (hb == null) {
+                throw new NotFoundException("The chosen action is not possible, lol");
+            }
+            return hb;
+        } finally {
+            em.close();
+        }
     }
 
     private void isPersonNameCorrect(Person p) throws MissingInputException {
@@ -216,6 +298,21 @@ public class PersonFacade {
         }
     }
 
+    public CityInfo getCityInfoByZip(int zip) throws NotFoundException {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<CityInfo> query = em.createQuery("SELECT a FROM CityInfo a WHERE a.zipCode = :zip", CityInfo.class);
+            query.setParameter("zip", zip);
+            CityInfo ci = query.getSingleResult();
+            if (ci == null) {
+                throw new NotFoundException("The chosen action is not possible, lol");
+            }
+            return ci;
+        } finally {
+            em.close();
+        }
+    }
+
     //Delete person by id
     public PersonDTO deletePerson(Long id) throws MissingInputException {
         EntityManager em = getEntityManager();
@@ -232,4 +329,5 @@ public class PersonFacade {
             em.close();
         }
     }
+
 }
