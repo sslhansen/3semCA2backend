@@ -163,12 +163,12 @@ public class PersonFacade {
     }
 
     //Get a persons by address
-    public PersonsDTO getPersonByAdd(Address address) throws NotFoundException {
+    public PersonsDTO getPersonByAdd(String streetName) throws NotFoundException {
         EntityManager em = getEntityManager();
 
         try {
-            TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.address = : address", Person.class);
-            query.setParameter("address", address);
+            TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.address.street = :street", Person.class);
+            query.setParameter("street", streetName);
             List<Person> p = query.getResultList();
             if (p == null) {
                 throw new NotFoundException("The chosen action is not possible, lol");

@@ -13,7 +13,9 @@ import facades.PersonFacade;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -61,12 +63,22 @@ public class PersonResource {
         return GSON.toJson(p);
     }
     
-//    @Path("/address/{address}")
-//    @GET
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public String lol4(@PathParam("address") Address address) throws NotFoundException, MissingInputException {
-//        PersonsDTO p = FACADE.getPersonByAdd(address);
-//        return GSON.toJson(p);
-//    }
-
+    @Path("/address/{street}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String lol4(@PathParam("street") String street) throws NotFoundException, MissingInputException {
+        PersonsDTO p = FACADE.getPersonByAdd(street);
+        return GSON.toJson(p);
+    }
+    
+    @Path("{id}")
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public String editPerson(@PathParam("id")long id, String pers) throws NotFoundException, MissingInputException {
+        Person person = GSON.fromJson(pers, Person.class);
+        person.setId(id);
+        PersonDTO pEdit = FACADE.editPerson(person);
+        return GSON.toJson(pEdit);
+    }
 }
