@@ -8,6 +8,7 @@ import entities.Person;
 import entities.Phone;
 import utils.EMF_Creator;
 import entities.RenameMe;
+import exceptions.MissingInputException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
@@ -20,11 +21,22 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 //Uncomment the line below, to temporarily disable this test
-@Disabled
+//@Disabled
 public class PersonFacadeTest {
 
     private static EntityManagerFactory emf;
     private static PersonFacade facade;
+    private Person person1;
+    private Person person2;
+    private Hobby hobby1;
+    private Hobby hobby2;
+    private Phone phone1;
+    private Phone phone2;
+    private Address address1;
+    private Address address2;
+    private CityInfo cityInfo1;
+    private CityInfo cityInfo2;
+    
 
     public PersonFacadeTest() {
     }
@@ -45,34 +57,25 @@ public class PersonFacadeTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-//        try {
-//            em.getTransaction().begin();
-//            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-//            em.persist(new Person("Some txt", "More text"));
-//            em.persist(new Person("aaa", "bbb"));
-//
-//            em.getTransaction().commit();
-//        } finally {
-//            em.close();
-//        }
-        CityInfo cityInfo1 = new CityInfo(1111, "TestCity1");
-        Address address1 = new Address("TestStreet1", "dont live here1");
-        Phone phone1 = new Phone(11111111, "dont call me");
-        Hobby hobby1 = new Hobby("Testing1", "nej.dk", "testing1", "desc1");
-        Person person1 = new Person("Test1@tester.dk", "McTest1", "Test1");
-        //person1.addHobby(hobby1);
+        cityInfo1 = new CityInfo(1111, "TestCity1");
+        address1 = new Address("TestStreet1", "dont live here1");
+        phone1 = new Phone(11111111, "dont call me");
+        hobby1 = new Hobby("Testing1", "nej.dk", "testing1", "desc1");
+        person1 = new Person("Test1@tester.dk", "McTest1", "Test1");
         person1.addPhone(phone1);
         cityInfo1.addAddress(address1);
         person1.setAddress(address1);
-        CityInfo cityInfo2 = new CityInfo(2222, "TestCity2");
-        Address address2 = new Address("TestStreet2", "dont live here2");
-        Phone phone2 = new Phone(22222222, "dont call me");
-        Hobby hobby2 = new Hobby("Testing2", "nej.dk", "testing2", "desc2");
-        Person person2 = new Person("Test2@tester.dk", "McTest2", "Test2");
-        //person2.addHobby(hobby2);
+        hobby1.addPersons(person1);
+        
+        cityInfo2 = new CityInfo(2222, "TestCity2");
+        address2 = new Address("TestStreet2", "dont live here2");
+        phone2 = new Phone(22222222, "dont call me");
+        hobby2 = new Hobby("Testing2", "nej.dk", "testing2", "desc2");
+        person2 = new Person("Test2@tester.dk", "McTest2", "Test2");
         person2.addPhone(phone2);
         cityInfo2.addAddress(address2);
         person2.setAddress(address2);
+        hobby2.addPersons(person2);
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
