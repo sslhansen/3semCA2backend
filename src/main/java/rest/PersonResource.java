@@ -54,7 +54,7 @@ public class PersonResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getPersonByTel(@PathParam("number") int number) throws NotFoundException, MissingInputException {
-        PersonDTO p = FACADE.getPersonByTel(number);
+        PersonsDTO p = FACADE.getPersonByTel(number);
         return GSON.toJson(p);
     }
 
@@ -115,7 +115,7 @@ public class PersonResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String countPeopleWithHobby(@PathParam("hobbyName") String hobbyName) throws NotFoundException, MissingInputException {
-        int count = FACADE.countPersonswithHobby(hobbyName);
+        long count = FACADE.countPersonswithHobby(hobbyName);
         return "{\"count\":" + count + "}"; 
     }
 
@@ -128,4 +128,12 @@ public class PersonResource {
         return json;
     }
 
+    @Path("/address/bystreet/{street}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getPersonsByStreet(@PathParam("street") String street) throws NotFoundException, MissingInputException {
+        PersonsDTO persons = FACADE.getPersonsByStreet(street);
+        return GSON.toJson(persons);
+    }
+    
 }

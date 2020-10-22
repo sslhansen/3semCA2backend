@@ -87,7 +87,7 @@ public class PersonResourceTest {
         Phone phone1 = new Phone(11111111, "dont call me");
         Hobby hobby1 = new Hobby("Testing1", "nej.dk", "testing1", "desc1");
         Person person1 = new Person("Test1@tester.dk", "McTest1", "Test1");
-        person1.addHobby(hobby1);
+  //      person1.addHobby(hobby1);
         person1.addPhone(phone1);
         cityInfo1.addAddress(address1);
         person1.setAddress(address1);
@@ -96,7 +96,7 @@ public class PersonResourceTest {
         Phone phone2 = new Phone(22222222, "dont call me");
         Hobby hobby2 = new Hobby("Testing2", "nej.dk", "testing2", "desc2");
         Person person2 = new Person("Test2@tester.dk", "McTest2", "Test2");
-        person2.addHobby(hobby2);
+//        person2.addHobby(hobby2);
         person2.addPhone(phone2);
         cityInfo2.addAddress(address2);
         person2.setAddress(address2);

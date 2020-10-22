@@ -218,7 +218,7 @@ public class PersonFacade {
     }
 
     //Get a person by a phone number, that must be 8 characters long
-    public PersonDTO getPersonByTel(int phonenumber) throws NotFoundException, MissingInputException {
+    public PersonsDTO getPersonByTel(int phonenumber) throws NotFoundException, MissingInputException {
         EntityManager em = getEntityManager();
         if (Integer.valueOf(phonenumber) == null || Integer.valueOf(phonenumber).toString().length() != 8) {
             throw new MissingInputException("The chosen input is not possible");
@@ -226,12 +226,12 @@ public class PersonFacade {
         try {
             TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p, Phone a WHERE p.id = a.id AND a.number = :number", Person.class);
             query.setParameter("number", phonenumber);
-            Person p = query.getSingleResult();
+            List<Person> p = query.getResultList();
+            PersonsDTO personsDTO = new PersonsDTO(p);
             if (p == null) {
                 throw new NotFoundException("The chosen action is not possible");
             }
-            PersonDTO result = new PersonDTO(p);
-            return result;
+            return personsDTO;
         } finally {
             em.close();
         }
@@ -347,19 +347,19 @@ public class PersonFacade {
 
         EntityManager em = getEntityManager();
         try {
-            TypedQuery<Address> query = em.createQuery("SELECT a FROM Address a WHERE a.persons.email = :email", Address.class);
+            TypedQuery<Address> query = em.createQuery("SELECT a FROM Address a, Person p WHERE p.email = :email", Address.class);
             query.setParameter("email", email);
             List<Address> adr = query.getResultList();
             if (adr.isEmpty()) {
                 throw new NotFoundException("No address with given email found");
             }
-            
+
             List<AddressDTO> aDTO = new ArrayList<>();
             for (Address address : adr) {
                 AddressDTO dto = new AddressDTO(address);
                 aDTO.add(dto);
             }
-            
+
             return aDTO;
         } finally {
             em.close();
@@ -391,11 +391,11 @@ public class PersonFacade {
 
         EntityManager em = getEntityManager();
         try {
-            TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.hobbies.name = :hobbyName", Person.class);
+            TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p, Hobby h WHERE h.name = :hobbyName", Person.class);
             query.setParameter("hobbyName", hobbyName);
             List<Person> people = query.getResultList();
             if (people.isEmpty()) {
-                throw new NotFoundException("No on has this hobby");
+                throw new NotFoundException("No one has this hobby");
             }
             PersonsDTO pDTO = new PersonsDTO(people);
             return pDTO;
@@ -405,14 +405,27 @@ public class PersonFacade {
     }
 
     //Count people with same hobby 
-    public int countPersonswithHobby(String hobbyName) throws NotFoundException {
+    public long countPersonswithHobby(String hobbyName) throws NotFoundException {
 
         EntityManager em = getEntityManager();
         try {
-            Query query = em.createQuery("SELECT COUNT(p) FROM Person p WHERE p.hobbies.name = :hobbyName", Person.class);
+            Query query = em.createQuery("SELECT COUNT(p) FROM Hobby h, Person p WHERE h.name = :hobbyName");
             query.setParameter("hobbyName", hobbyName);
-            int result = (int) query.getSingleResult();
+            long result = (long) query.getSingleResult();
             return result;
+        } finally {
+            em.close();
+        }
+    }
+
+    public PersonsDTO getPersonsByStreet(String streetname) throws NotFoundException {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.address.street = :streetname", Person.class);
+            query.setParameter("streetname", streetname);
+            List<Person> result = query.getResultList();
+            PersonsDTO personsDTO = new PersonsDTO(result);
+            return personsDTO;
         } finally {
             em.close();
         }
