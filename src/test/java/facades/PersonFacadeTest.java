@@ -137,38 +137,37 @@ public class PersonFacadeTest {
         assertEquals(expectedPersons, facade.getAllPersons().getAll().size(), "Expects two persons");
     }
 
+@Test
+    public void testDeletePerson() throws MissingInputException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Person p = em.find(Person.class, person1.getId());
+            assertNotNull(p);
+            facade.deletePerson(person1.getId());
+            assertEquals(1, facade.getAllPersons());
+
+        } finally {
+            em.close();
+        }
+    }
+    // still no work, trying to figure out WHY TF NOT
 //    @Test
-//    public void testDeletePerson(){
-//        EntityManager em = emf.createEntityManager();
-//        try {
-//            Person person1 = em.find(Person.class, person1.getId());
-//            assertNotNull(person1);
-//            facade.deletePerson(person1.getId());
-//            assertEquals(1, facade.getAllPersons());
+//    public void testGetPersonById() throws MissingInputException {
+//        PersonDTO person = facade.getAllPersons(person1.getId());
+//        assertEquals("Test", person1.getFirstName());
+//    }
 //
-//        } finally {
-//            em.close();
-//        }
-//    }
 //    @Test
-//    public void testGetPersonByAddress() {
-//        Person person1 = facade.
-//        person1.getAddress();
-//        Movie mov = facade.getPersonByAdd(person1.getAddress());
-//        assertEquals(rm1.getTitle(), mov.getTitle());
+//    public void testEditPerson() throws MissingInputException{
+//        person1.setLastName("ChangedName");
+//        PersonDTO p1New = facade.editPerson(new PersonDTO(person1));
+//        assertEquals(p1New.getFirstName()), person1.getLastName());
 //    }
+//
 //    @Test
-//    public void testGetPersonByAddress() {
-//        
-//     PersonDTO person1 = facade.getPersonByAdd(streetName);
-//     int expectedPerson = person1.getAddress()
-//        assertEquals("lol", person1.getAddress());
-//    }
-//     @Test
-//    public void testGetPersonByAddress() {
-//        int actualSize = facade.;
-//        int expectedSize = "Hejda";
-//        assertEquals(expectedSize, actualSize, "Expects Hejsa");
+//    public void testGetPersonByAddress() throws MissingInputException {
+//        PersonDTO person = facade.getAllPersons(person1.getAddress());
+//        assertEquals("TestStreet1", person1.getFirstName();
 //    }
 // Why do i choose to suffer when death is inevitable anyway
 }
