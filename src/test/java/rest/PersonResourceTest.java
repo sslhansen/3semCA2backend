@@ -42,6 +42,16 @@ public class PersonResourceTest {
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
+    private CityInfo cityInfo1;
+    private CityInfo cityInfo2;
+    private Address address1;
+    private Address address2;
+    private Phone phone1;
+    private Phone phone2;
+    private Hobby hobby1;
+    private Hobby hobby2;
+    private Person person1;
+    private Person person2;
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -82,30 +92,31 @@ public class PersonResourceTest {
 //        } finally {
 //            em.close();
 //        }
-        CityInfo cityInfo1 = new CityInfo(1111, "TestCity1");
-        Address address1 = new Address("TestStreet1", "dont live here1");
-        Phone phone1 = new Phone(11111111, "dont call me");
-        Hobby hobby1 = new Hobby("Testing1", "nej.dk", "testing1", "desc1");
-        Person person1 = new Person("Test1@tester.dk", "McTest1", "Test1");
-  //      person1.addHobby(hobby1);
+
+        cityInfo1 = new CityInfo(1111, "TestCity1");
+        address1 = new Address("TestStreet1", "dont live here1");
+        phone1 = new Phone(11111111, "dont call me");
+        hobby1 = new Hobby("Testing1", "nej.dk", "testing1", "desc1");
+        person1 = new Person("Test1@tester.dk", "McTest1", "Test1");
+        hobby1.addPersons(person1);
         person1.addPhone(phone1);
         cityInfo1.addAddress(address1);
         person1.setAddress(address1);
-        CityInfo cityInfo2 = new CityInfo(2222, "TestCity2");
-        Address address2 = new Address("TestStreet2", "dont live here2");
-        Phone phone2 = new Phone(22222222, "dont call me");
-        Hobby hobby2 = new Hobby("Testing2", "nej.dk", "testing2", "desc2");
-        Person person2 = new Person("Test2@tester.dk", "McTest2", "Test2");
-//        person2.addHobby(hobby2);
+        cityInfo2 = new CityInfo(2222, "TestCity2");
+        address2 = new Address("TestStreet2", "dont live here2");
+        phone2 = new Phone(22222222, "dont call me");
+        hobby2 = new Hobby("Testing2", "nej.dk", "testing2", "desc2");
+        person2 = new Person("Test2@tester.dk", "McTest2", "Test2");
+        hobby2.addPersons(person2);
         person2.addPhone(phone2);
         cityInfo2.addAddress(address2);
         person2.setAddress(address2);
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
+            em.createNamedQuery("CityInfo.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Address.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Hobby.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
             em.persist(cityInfo1);
             em.persist(cityInfo2);
@@ -146,16 +157,12 @@ public class PersonResourceTest {
 
     @Test
     public void getAllPersons() {
-        List<PersonDTO> personsDTOs;
-
         Response response = given()
                 .when().get("/person/all")
                 .then()
                 .contentType("application/json")
                 .body("all.firstName", hasItems("Lars", "Henrik", "Pleasevirk"))
                 .extract().response();
-        System.out.println(response.asString());
-
     }
 
 }

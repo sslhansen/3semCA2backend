@@ -6,9 +6,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Phone.deleteAllRows", query = "DELETE from Phone"),
+})
+
 public class Phone implements Serializable {
 
     private static final long serialVersionUID = 1L;
