@@ -2,6 +2,8 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.AddressDTO;
+import dto.HobbyDTO;
 import dto.PersonDTO;
 import dto.PersonsDTO;
 import entities.Address;
@@ -51,7 +53,7 @@ public class PersonResource {
     @Path("{number}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String lol2(@PathParam("number") int number) throws NotFoundException, MissingInputException {
+    public String getPersonByTel(@PathParam("number") int number) throws NotFoundException, MissingInputException {
         PersonDTO p = FACADE.getPersonByTel(number);
         return GSON.toJson(p);
     }
@@ -59,15 +61,15 @@ public class PersonResource {
     @Path("/zip/{number}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String lol3(@PathParam("number") int number) throws NotFoundException, MissingInputException {
+    public String getPersonsInZip(@PathParam("number") int number) throws NotFoundException, MissingInputException {
         PersonsDTO p = FACADE.getAllPersonsInZip(number);
         return GSON.toJson(p);
     }
 
-    @Path("/address/{street}")
+    @Path("/street/{street}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String lol4(@PathParam("street") String street) throws NotFoundException, MissingInputException {
+    public String getPeopleOnStreet(@PathParam("street") String street) throws NotFoundException, MissingInputException {
         PersonsDTO p = FACADE.getPersonByAdd(street);
         return GSON.toJson(p);
     }
@@ -88,8 +90,42 @@ public class PersonResource {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     public String addPerson(String pers) throws NotFoundException, MissingInputException {
-        Person person = GSON.fromJson(pers, Person.class);
+        PersonDTO person = GSON.fromJson(pers, PersonDTO.class);
         PersonDTO pDTO = FACADE.addPerson(person);
         return GSON.toJson(pDTO);
     }
+
+    @Path("/address/{email}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getAddressByEmail(@PathParam("email") String email) throws NotFoundException, MissingInputException {
+        List<AddressDTO> a = FACADE.getAddressByEmail(email);
+        return GSON.toJson(a);
+    }
+
+    @Path("/hobby/{hobbyName}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getPeopleByHobby(@PathParam("hobbyName") String hobbyName) throws NotFoundException, MissingInputException {
+        PersonsDTO p = FACADE.getPersonswithHobby(hobbyName);
+        return GSON.toJson(p);
+    }
+
+    @Path("/count/{hobbyName}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String countPeopleWithHobby(@PathParam("hobbyName") String hobbyName) throws NotFoundException, MissingInputException {
+        int count = FACADE.countPersonswithHobby(hobbyName);
+        return "{\"count\":" + count + "}"; 
+    }
+
+    @Path("/hobby/all")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getAllHobbies() {
+        List<HobbyDTO> hDTO = FACADE.getAllHobbies();
+        String json = GSON.toJson(hDTO);
+        return json;
+    }
+
 }

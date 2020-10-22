@@ -30,7 +30,7 @@ public class Person implements Serializable {
     private String firstName;
     private String lastName;
 
-    @ManyToMany(mappedBy = "persons", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany//(mappedBy = "persons", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     List<Hobby> hobbies;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
@@ -50,16 +50,22 @@ public class Person implements Serializable {
     public Person() {
     }
 
+    public void setHobbies(List<Hobby> hobbies) {
+        this.hobbies = hobbies;
+    }
+    
+    
+
     public List<Hobby> getHobbies() {
         return hobbies;
     }
 
-    public void addHobby(Hobby hobby) {
-        if (hobby != null) {
-            this.hobbies.add(hobby);
-            hobby.getPersons().add(this);
-        }
-    }
+//    public void addHobby(Hobby hobby) {
+//        if (hobby != null) {
+//            this.hobbies.add(hobby);
+//            hobby.getPersons().add(this);
+//        }
+//    }
 
     public void removeHobby(Hobby hobby) {
         if (hobby != null) {

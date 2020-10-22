@@ -3,7 +3,9 @@ package entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +24,7 @@ public class Hobby implements Serializable {
     private String type;
     private String description;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "hobbies", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<Person> persons;
     
     public Hobby() {
@@ -36,6 +38,13 @@ public class Hobby implements Serializable {
         this.persons = new ArrayList<>();
     }
 
+    public void addPersons(Person person) {
+        this.persons.add(person);
+        if (person != null) {
+            person.getHobbies().add(this);
+        }
+    }
+    
     public List<Person> getPersons() {
         return persons;
     }
