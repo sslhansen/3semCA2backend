@@ -1,16 +1,20 @@
 [![Build Status](https://travis-ci.org/sslhansen/3semCA2backend.svg?branch=main)](https://travis-ci.org/sslhansen/3semCA2backend)
 
-*This project is meant as start code for projects and exercises given in Flow-1+2 (+3 using the security-branch) at http://cphbusiness.dk in the Study Program "AP degree in Computer Science"*
+# CA-2
+## Contributers
+* Sebastian Steen Lundby Hansen (cph-sh499@cphbusiness.dk);
+* Sebastian James Bentley (cph-sb287@cphbusiness.dk);
+* Rasmus Grønbek (cph-rg86@cphbusiness.dk);
+* Michael Ibsen (cph-mi93@cphbusiness.dk);
 
-*Projects which are expected to use this start-code are projects that require all, or most of the following technologies:*
- - *JPA and REST*
-- *Testing, including database test*
-- *Testing, including tests of REST-API's*
-- *CI and CONTINUOUS DELIVERY*
+## How far did we get?
 
-### Preconditions
-*In order to use this code, you should have a local developer setup + a "matching" droplet on Digital Ocean as described in the 3. semester guidelines* 
-# Getting Started
+## Additional Notes
 
-This document explains how to use this code (build, test and deploy), locally with maven, and remotely with maven controlled by Travis
- - [How to use](https://docs.google.com/document/d/1K6s6Tt65bzB8bCSE_NUE8alJrLRNTKCwax3GEm4OjOE/edit?usp=sharing)
+## Assignmentrelated links
+* [Assignment]: 
+* [Project Homepage]: 
+* [Travis]: 
+
+### Editor used - Netbeans 12.0
+### java version - jdk1.8
