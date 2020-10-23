@@ -391,13 +391,13 @@ public class PersonFacade {
 
         EntityManager em = getEntityManager();
         try {
-            TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p, Hobby h WHERE h.name = :hobbyName", Person.class);
+            TypedQuery<Person> query = em.createQuery("SELECT DISTINCT(p) FROM Person p, Hobby h WHERE h.name = :hobbyName", Person.class);
             query.setParameter("hobbyName", hobbyName);
-            List<Person> people = query.getResultList();
+            List<Person> people = query.getResultList();     
             if (people.isEmpty()) {
                 throw new NotFoundException("No one has this hobby");
             }
-            PersonsDTO pDTO = new PersonsDTO(people);
+            PersonsDTO pDTO = new PersonsDTO(people);        
             return pDTO;
         } finally {
             em.close();
@@ -409,7 +409,7 @@ public class PersonFacade {
 
         EntityManager em = getEntityManager();
         try {
-            Query query = em.createQuery("SELECT COUNT(p) FROM Hobby h, Person p WHERE h.name = :hobbyName");
+            Query query = em.createQuery("SELECT COUNT(DISTINCT(p)) FROM Hobby h, Person p WHERE h.name = :hobbyName");
             query.setParameter("hobbyName", hobbyName);
             long result = (long) query.getSingleResult();
             return result;

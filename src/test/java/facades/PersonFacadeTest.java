@@ -139,9 +139,7 @@ public class PersonFacadeTest {
 
     @Test
     public void testgetAllPersons() {
-        System.out.println("blabla");
         int actualSize = facade.getAllPersons().getAll().size();
-        System.out.println("blabla2");
         int expectedSize = 2;
         assertEquals(expectedSize, actualSize, "Expects two persons");
     }
