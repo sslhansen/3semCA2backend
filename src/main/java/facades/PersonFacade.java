@@ -247,7 +247,7 @@ public class PersonFacade {
             TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.address.cityinfo.zipCode = :zip ", Person.class);
             query.setParameter("zip", zip);
             List<Person> p = query.getResultList();
-            if (p == null) {
+            if (p.isEmpty()) {
                 throw new NotFoundException("The chosen action is not possible");
             }
             PersonsDTO result = new PersonsDTO(p);
@@ -260,12 +260,11 @@ public class PersonFacade {
     //Get a persons by address
     public PersonsDTO getPersonByAdd(String streetName) throws NotFoundException {
         EntityManager em = getEntityManager();
-
         try {
             TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.address.street = :street", Person.class);
             query.setParameter("street", streetName);
             List<Person> p = query.getResultList();
-            if (p == null) {
+            if (p.isEmpty()) {
                 throw new NotFoundException("The chosen action is not possible");
             }
             PersonsDTO result = new PersonsDTO(p);
@@ -393,11 +392,11 @@ public class PersonFacade {
         try {
             TypedQuery<Person> query = em.createQuery("SELECT DISTINCT(p) FROM Person p, Hobby h WHERE h.name = :hobbyName", Person.class);
             query.setParameter("hobbyName", hobbyName);
-            List<Person> people = query.getResultList();     
+            List<Person> people = query.getResultList();
             if (people.isEmpty()) {
                 throw new NotFoundException("No one has this hobby");
             }
-            PersonsDTO pDTO = new PersonsDTO(people);        
+            PersonsDTO pDTO = new PersonsDTO(people);
             return pDTO;
         } finally {
             em.close();

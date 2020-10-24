@@ -19,6 +19,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeAll;
@@ -144,6 +145,7 @@ public class PersonFacadeTest {
         assertEquals(expectedSize, actualSize, "Expects two persons");
     }
 //
+
     @Test
     public void testAddPerson() {
         EntityManager em = emf.createEntityManager();
@@ -172,12 +174,26 @@ public class PersonFacadeTest {
         int expectedPersons = 3;
         assertEquals(expectedPersons, facade.getAllPersons().getAll().size(), "Expects two persons");
     }
-    
+
     @Test
     public void testGetPersonByAddress() throws MissingInputException, NotFoundException {
         PersonsDTO person = facade.getPersonByAdd(address1.getStreet());
         PersonDTO pdto = person.getAll().get(0);
         assertEquals("McTest1", pdto.getFirstName());
+    }
+
+    @Test
+    public void testGetPersonByAddressMissingInput() throws NotFoundException {
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            PersonsDTO person = facade.getPersonByAdd("fiskeaddresse");
+        });
+    }
+    
+        @Test
+    public void testGetAllPersonsInZipInvalidInput() throws NotFoundException {
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            PersonsDTO person = facade.getAllPersonsInZip(0000000);
+        });
     }
     
     @Test
@@ -186,59 +202,61 @@ public class PersonFacadeTest {
         PersonDTO pdto = person.getAll().get(0);
         assertEquals("McTest1", pdto.getFirstName());
     }
-    
+
     @Test
-    public void testGetPersonByTel() throws NotFoundException, MissingInputException{
+    public void testGetPersonByTel() throws NotFoundException, MissingInputException {
         PersonsDTO person = facade.getPersonByTel(phone1.getNumber());
         PersonDTO pdto = person.getAll().get(0);
         assertEquals("McTest1", pdto.getFirstName());
     }
-    
+
     @Test
     public void testPersonsByStreet() throws NotFoundException {
         PersonsDTO person = facade.getPersonsByStreet(address1.getStreet());
         PersonDTO pdto = person.getAll().get(0);
         assertEquals("McTest1", pdto.getFirstName());
     }
-    
+
     @Test
     public void testPersonsWithHobby() throws NotFoundException {
         PersonsDTO person = facade.getPersonswithHobby(hobby1.getName());
         PersonDTO pdto = person.getAll().get(0);
         assertEquals("McTest1", pdto.getFirstName());
     }
-    
+
     @Test
     public void testGetAddressByEmail() throws NotFoundException {
         List<AddressDTO> address = facade.getAddressByEmail(person1.getEmail());
         AddressDTO adto = address.get(0);
         assertEquals("TestStreet1", adto.getStreet());
     }
-    
+
     @Test
     public void testGetAddressByStreet() throws NotFoundException {
         Address address = facade.getAddressByStreet(address1.getStreet());
         assertEquals("TestStreet1", address.getStreet());
     }
-    
+
     @Test
     public void testGetAllHobbies() {
         List<HobbyDTO> hob = facade.getAllHobbies();
         HobbyDTO hdto = hob.get(0);
         assertEquals("Testing1", hdto.getName());
     }
-    
+
     @Test
     public void testGetCityInfoByZip() throws NotFoundException {
         CityInfo city = facade.getCityInfoByZip(cityInfo1.getZipCode());
         assertEquals("TestStreet1", city.getAddresses().get(0).getStreet());
     }
+
     @Test
     public void testCreateTestPerson() throws NotFoundException {
         facade.createTestPerson();
         Address address = facade.getAddressByStreet("lol");
         assertEquals("lol", address.getStreet());
     }
+
     @Test
     public void testCountPersonsWithHobby() throws NotFoundException {
         long num = facade.countPersonswithHobby(hobby1.getName());
@@ -260,8 +278,6 @@ public class PersonFacadeTest {
 //    }
 
     // still no work, trying to figure out WHY TF NOT
-
-
 //    @Disabled
 //    @Test
 //    public void testEditPerson() throws MissingInputException{
@@ -269,6 +285,5 @@ public class PersonFacadeTest {
 //        PersonDTO p1New = facade.editPerson(new PersonDTO(person1));
 //        assertEquals(p1New.getFirstName()), person1.getLastName());
 //    }
-
 // Why do i choose to suffer when death is inevitable anyway
 }
