@@ -142,4 +142,12 @@ public class PersonResource {
         return GSON.toJson(persons);
     }
     
+    @Path("/singlehobby/{hobbyName}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getSingleHobby(@PathParam("hobbyName") String hobbyName) throws NotFoundException, MissingInputException {
+        HobbyDTO hobby = FACADE.getSpecificHobbyByName(hobbyName);
+        return GSON.toJson(hobby);
+    }
+    
 }

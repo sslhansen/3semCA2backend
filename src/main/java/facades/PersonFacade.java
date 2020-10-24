@@ -430,4 +430,19 @@ public class PersonFacade {
         }
     }
 
+    //Find people with same hobby 
+    public HobbyDTO getSpecificHobbyByName(String hobbyName) throws NotFoundException {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h WHERE h.name = :hobbyName", Hobby.class);
+            query.setParameter("hobbyName", hobbyName);
+            Hobby hobby = query.getSingleResult();
+            
+            HobbyDTO hDTO = new HobbyDTO(hobby);
+            return hDTO;
+        } finally {
+            em.close();
+        }
+    }
+    
 }
