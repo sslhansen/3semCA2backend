@@ -1,7 +1,6 @@
 package facades;
 
 import dto.AddressDTO;
-import dto.CityInfoDTO;
 import dto.HobbyDTO;
 import dto.PersonDTO;
 import dto.PersonsDTO;
@@ -20,10 +19,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 //Uncomment the line below, to temporarily disable this test

@@ -1,8 +1,6 @@
 package dto;
 
 import entities.Hobby;
-import entities.Person;
-import java.util.List;
 
 public class HobbyDTO {
 

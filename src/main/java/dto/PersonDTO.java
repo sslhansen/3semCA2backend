@@ -1,6 +1,5 @@
 package dto;
 
-import entities.Address;
 import entities.Hobby;
 import entities.Person;
 import entities.Phone;
