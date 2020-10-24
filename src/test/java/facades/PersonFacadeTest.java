@@ -11,7 +11,6 @@ import entities.Hobby;
 import entities.Person;
 import entities.Phone;
 import utils.EMF_Creator;
-import entities.RenameMe;
 import exceptions.MissingInputException;
 import exceptions.NotFoundException;
 import java.util.List;
@@ -262,28 +261,5 @@ public class PersonFacadeTest {
         long num = facade.countPersonswithHobby(hobby1.getName());
         assertEquals(2, num);
     }
-//    @Disabled
-//    @Test
-//    public void testDeletePerson() throws MissingInputException {
-//        EntityManager em = emf.createEntityManager();
-//        try {
-//            Person p = em.find(Person.class, person1.getId());
-//            assertNotNull(p);
-//            facade.deletePerson(person1.getId());
-//            assertEquals(1, facade.getAllPersons());
-//
-//        } finally {
-//            em.close();
-//        }
-//    }
 
-    // still no work, trying to figure out WHY TF NOT
-//    @Disabled
-//    @Test
-//    public void testEditPerson() throws MissingInputException{
-//        person1.setLastName("ChangedName");
-//        PersonDTO p1New = facade.editPerson(new PersonDTO(person1));
-//        assertEquals(p1New.getFirstName()), person1.getLastName());
-//    }
-// Why do i choose to suffer when death is inevitable anyway
 }
